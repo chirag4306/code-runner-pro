@@ -44,7 +44,11 @@ const Index = () => {
             isRunning={isRunning}
           />
         </div>
-        <div className="bg-header border-b border-border px-3 py-2.5">
+        <div className="bg-header border-b border-border px-3 py-2.5 flex items-center gap-2">
+          <span className="text-xs font-mono text-muted-foreground tracking-wide opacity-70">
+            made by <span className="text-primary font-semibold">chirag</span>
+          </span>
+          <div className="h-4 w-px bg-border" />
           <ApiKeyButton onClick={() => setApiKeyOpen(true)} />
         </div>
       </div>
