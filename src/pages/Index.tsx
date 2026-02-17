@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import StdinInput from "@/components/StdinInput";
 import EditorHeader from "@/components/EditorHeader";
 import CodeEditor from "@/components/CodeEditor";
 import Terminal from "@/components/Terminal";
@@ -11,6 +12,7 @@ const Index = () => {
   const [codes, setCodes] = useState<Record<string, string>>(() =>
     Object.fromEntries(LANGUAGES.map((l) => [l.id, l.defaultCode]))
   );
+  const [stdin, setStdin] = useState("");
   const [apiKeyOpen, setApiKeyOpen] = useState(false);
   const { execute, isRunning, result } = useCodeExecution();
 
@@ -24,8 +26,8 @@ const Index = () => {
   );
 
   const handleRun = useCallback(() => {
-    execute(currentCode, language.judge0Id);
-  }, [execute, currentCode, language.judge0Id]);
+    execute(currentCode, language.judge0Id, stdin);
+  }, [execute, currentCode, language.judge0Id, stdin]);
 
   const handleLanguageChange = useCallback((lang: Language) => {
     setLanguage(lang);
@@ -49,12 +51,15 @@ const Index = () => {
 
       <div className="flex-1 flex flex-col md:flex-row min-h-0">
         {/* Editor pane */}
-        <div className="flex-1 min-h-0 md:min-w-0">
-          <CodeEditor
-            language={language}
-            code={currentCode}
-            onChange={handleCodeChange}
-          />
+        <div className="flex-1 min-h-0 md:min-w-0 flex flex-col">
+          <div className="flex-1 min-h-0">
+            <CodeEditor
+              language={language}
+              code={currentCode}
+              onChange={handleCodeChange}
+            />
+          </div>
+          <StdinInput value={stdin} onChange={setStdin} />
         </div>
 
         {/* Resizer visual */}

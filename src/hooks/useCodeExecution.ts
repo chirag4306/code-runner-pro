@@ -12,7 +12,7 @@ export const useCodeExecution = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [result, setResult] = useState<ExecutionResult | null>(null);
 
-  const execute = useCallback(async (code: string, languageId: number) => {
+  const execute = useCallback(async (code: string, languageId: number, stdin?: string) => {
     setIsRunning(true);
     setResult(null);
 
@@ -28,6 +28,7 @@ export const useCodeExecution = () => {
         body: JSON.stringify({
           source_code: code,
           language_id: languageId,
+          stdin: stdin || "",
         }),
       });
 
