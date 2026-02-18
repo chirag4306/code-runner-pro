@@ -22,6 +22,13 @@ export const LANGUAGES: Language[] = [
     defaultCode: `// JavaScript (Node.js)\nconsole.log("Hello, World!");`,
   },
   {
+    id: "bash",
+    name: "Bash",
+    judge0Id: 46,
+    monacoLang: "shell",
+    defaultCode: `#!/bin/bash\necho "Hello, World!"`,
+  },
+  {
     id: "java",
     name: "Java",
     judge0Id: 62,
