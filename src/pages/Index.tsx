@@ -26,6 +26,11 @@ const Index = () => {
   );
 
   const handleRun = useCallback(() => {
+    const key = localStorage.getItem("judge0_api_key");
+    if (!key) {
+      setApiKeyOpen(true);
+      return;
+    }
     execute(currentCode, language.judge0Id, stdin);
   }, [execute, currentCode, language.judge0Id, stdin]);
 
