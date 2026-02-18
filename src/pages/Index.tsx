@@ -3,7 +3,6 @@ import StdinInput from "@/components/StdinInput";
 import EditorHeader from "@/components/EditorHeader";
 import CodeEditor from "@/components/CodeEditor";
 import Terminal from "@/components/Terminal";
-import ApiKeyDialog, { ApiKeyButton } from "@/components/ApiKeyDialog";
 import { LANGUAGES, type Language } from "@/lib/constants";
 import { useCodeExecution } from "@/hooks/useCodeExecution";
 
@@ -13,7 +12,6 @@ const Index = () => {
     Object.fromEntries(LANGUAGES.map((l) => [l.id, l.defaultCode]))
   );
   const [stdin, setStdin] = useState("");
-  const [apiKeyOpen, setApiKeyOpen] = useState(false);
   const { execute, isRunning, result } = useCodeExecution();
 
   const currentCode = codes[language.id] ?? language.defaultCode;
@@ -26,11 +24,6 @@ const Index = () => {
   );
 
   const handleRun = useCallback(() => {
-    const key = localStorage.getItem("judge0_api_key");
-    if (!key) {
-      setApiKeyOpen(true);
-      return;
-    }
     execute(currentCode, language.judge0Id, stdin);
   }, [execute, currentCode, language.judge0Id, stdin]);
 
@@ -53,8 +46,6 @@ const Index = () => {
           <span className="text-xs font-mono text-muted-foreground tracking-wide opacity-70">
             made by <span className="text-primary font-semibold">chirag</span>
           </span>
-          <div className="h-4 w-px bg-border" />
-          <ApiKeyButton onClick={() => setApiKeyOpen(true)} />
         </div>
       </div>
 
@@ -79,8 +70,6 @@ const Index = () => {
           <Terminal result={result} isRunning={isRunning} />
         </div>
       </div>
-
-      <ApiKeyDialog open={apiKeyOpen} onOpenChange={setApiKeyOpen} />
     </div>
   );
 };
