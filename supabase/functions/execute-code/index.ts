@@ -6,7 +6,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const JUDGE0_URL = "https://judge0-ce.p.rapidapi.com";
+const JUDGE0_URL = "https://ce.judge0.com";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -16,14 +16,6 @@ serve(async (req) => {
   }
 
   try {
-    const apiKey = Deno.env.get("JUDGE0_RAPIDAPI_KEY");
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: "API key not configured" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
     const { source_code, language_id, stdin } = await req.json();
 
     // Submit
@@ -31,11 +23,7 @@ serve(async (req) => {
       `${JUDGE0_URL}/submissions?base64_encoded=false&wait=false`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-RapidAPI-Key": apiKey,
-          "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ source_code, language_id, stdin: stdin || "" }),
       }
     );
@@ -55,12 +43,7 @@ serve(async (req) => {
       await sleep(1000);
       const pollRes = await fetch(
         `${JUDGE0_URL}/submissions/${token}?base64_encoded=false`,
-        {
-          headers: {
-            "X-RapidAPI-Key": apiKey,
-            "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
-          },
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
 
       if (!pollRes.ok) {
